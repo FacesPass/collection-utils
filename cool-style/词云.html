@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>词云</title>
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .word-cloud {
+      width: 500px;
+      height: 500px;
+      border: 2px solid #000;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="word-cloud"></div>
+</body>
+<script>
+  (function () {
+    const data = (() => ({
+      hotWord: [],
+      colors: [],
+      wordDomArr: [],
+      timer: null,
+      containerSize: null,
+      resetTime: 0
+    }))()
+
+    const init = () => {
+      initData()
+      dealSpan()
+      initWordPosition()
+      render()
+    }
+
+    window.onload = function () {
+      init()
+    }
+
+    window.onbeforeunload = function () {
+      cancelAnimationFrame(data.timer)
+    }
+
+    const initData = () => {
+      for (let i = 0; i < 100; i++) {
+        data.hotWord.push(`测试${i}`)
+        data.colors.push(getRandomColor())
+      }
+    }
+
+    //获取随机颜色
+    const getRandomColor = () => {
+      const r = Math.floor(Math.random() * 256)
+      const g = Math.floor(Math.random() * 256)
+      const b = Math.floor(Math.random() * 256)
+      return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`
+    }
+
+    //获取随机数字
+    const getRandomNumber = (minInteger = 12, maxInteger = 28) => {
+      const choice = maxInteger - minInteger + 1
+      return Math.floor(Math.random() * choice + minInteger)
+    }
+
+    const dealSpan = () => {
+      const wordCloudDom = document.querySelector('.word-cloud')
+      const fragment = document.createDocumentFragment()
+
+      data.hotWord.forEach(word => {
+        // 根据词云数量生成span数量设置字体颜色和大小
+        const spanEl = document.createElement('span')
+        spanEl.style.position = 'relative'
+        spanEl.style.display = 'inline-block'
+        spanEl.style.color = getRandomColor()
+        spanEl.style.fontSize = getRandomNumber() + 'px'
+        spanEl.local = {
+          //速度
+          velocity: {
+            x: Math.random() - 0.5,
+            y: Math.random() - 0.5
+          },
+          //当前位置
+          position: {
+            x: 0,
+            y: 0
+          },
+          //方向，正数往右，负数往左
+          direction: {
+            x: 1,
+            y: 1
+          }
+        }
+        spanEl.innerText = word
+        data.wordDomArr.push(spanEl)
+        fragment.appendChild(spanEl)
+      })
+
+      wordCloudDom.appendChild(fragment)
+    }
+
+    const render = () => {
+      //防止无限循环导致数字溢出
+      if (data.resetTime < 100) {
+        data.resetTime = data.resetTime + 1
+        data.timer = requestAnimationFrame(render)
+        data.resetTime = 0
+      }
+      wordMove()
+    }
+
+    const initWordPosition = () => {
+      //计算每个词的真实位置
+      data.wordDomArr.forEach(wordDom => {
+        wordDom.local.realPosition = {
+          minX: wordDom.offsetLeft,
+          maxX: wordDom.offsetLeft + wordDom.offsetWidth,
+          minY: wordDom.offsetTop,
+          maxY: wordDom.offsetTop + wordDom.offsetHeight
+        }
+      })
+      data.containerSize = getContainerSize()
+    }
+
+    //让词语移动
+    const wordMove = () => {
+      data.wordDomArr.forEach(wordDom => {
+        // 设置运动方向 大于边界或者小于边界的时候换方向
+        const wordRealPosition = wordDom.local.realPosition
+        const wordCurPosition = wordDom.local.position
+        const wordDirectiion = wordDom.local.direction
+        const wordVelocity = wordDom.local.velocity
+
+        if (wordRealPosition.minX + wordCurPosition.x < data.containerSize.left) {
+          wordDom.local.direction.x = -wordDom.local.direction.x
+        }
+        if (wordRealPosition.maxX + wordCurPosition.x > data.containerSize.right) {
+          wordDom.local.direction.x = -wordDom.local.direction.x
+        }
+        if (wordRealPosition.minY + wordCurPosition.y < data.containerSize.top) {
+          wordDom.local.direction.y = -wordDom.local.direction.y
+        }
+        if (wordRealPosition.maxY + wordCurPosition.y > data.containerSize.bottom) {
+          wordDirectiion.y = -wordDirectiion.y
+        }
+        wordCurPosition.x += wordVelocity.x * wordDirectiion.x;
+        wordCurPosition.y += wordVelocity.y * wordDirectiion.y;
+        wordDom.style.transform = `translate(${wordCurPosition.x}px, ${wordCurPosition.y}px)`
+      })
+    }
+
+    //获取容器的边界位置
+    const getContainerSize = () => {
+      const wordCloudDom = document.querySelector('.word-cloud')
+      return {
+        left: wordCloudDom.offsetLeft,
+        top: wordCloudDom.offsetTop,
+        right: wordCloudDom.offsetLeft + wordCloudDom.offsetWidth,
+        bottom: wordCloudDom.offsetTop + wordCloudDom.offsetHeight
+      }
+    }
+
+  })()
+</script>
+
+</html>
