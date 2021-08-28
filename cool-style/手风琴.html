@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手风琴css</title>
+  <style>
+    /* box-shadow:offset-x offset-y blur(模糊) spread(阴影扩散) color position(阴影位置); */
+    :root {
+      --background: #fff;
+      --red: #e74c3c;
+      --orange: #ff9c55;
+      --yellow: #f1c40f;
+      --green: #1fc11b;
+      --blue: #22d2a0;
+    }
+
+    .card {
+      margin: 200px auto;
+      background: var(--background);
+      width: 300px;
+      text-align: center;
+      line-height: 100px;
+      border: 3px solid var(--red);
+      box-shadow: 0 0 0 0 var(--background),
+        0 0 var(--orange), 0 0 0 0 var(--background),
+        0 0 var(--yellow), 0 0 0 0 var(--background),
+        0 0 var(--green), 0 0 0 0 var(--background),
+        0 0 var(--blue), 0 0 0 0 var(--background);
+      transition: box-shadow 0.5s, bottom 0.5s, right 0.5s;
+      position: relative;
+      bottom: 0;
+      right: 0;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      bottom: -40px;
+      right: 40px;
+      box-shadow: 10px -10px 0 -3px var(--background),
+        10px -10px var(--orange), 20px -20px 0 -3px var(--background),
+        20px -20px var(--yellow), 30px -30px 0 -3px var(--background),
+        30px -30px var(--green), 40px -40px 0 -3px var(--background),
+        40px -40px var(--blue), 50px -50px 0 -3px var(--background);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <p>手风琴效果</p>
+  </div>
+
+</body>
+
+</html>
