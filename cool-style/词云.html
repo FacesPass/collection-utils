@@ -141,18 +141,15 @@
         const wordDirectiion = wordDom.local.direction
         const wordVelocity = wordDom.local.velocity
 
-        if (wordRealPosition.minX + wordCurPosition.x < data.containerSize.left) {
+        if (wordRealPosition.minX + wordCurPosition.x < data.containerSize.left ||
+          wordRealPosition.maxX + wordCurPosition.x > data.containerSize.right) {
           wordDom.local.direction.x = -wordDom.local.direction.x
         }
-        if (wordRealPosition.maxX + wordCurPosition.x > data.containerSize.right) {
-          wordDom.local.direction.x = -wordDom.local.direction.x
-        }
-        if (wordRealPosition.minY + wordCurPosition.y < data.containerSize.top) {
+        if (wordRealPosition.minY + wordCurPosition.y < data.containerSize.top ||
+          wordRealPosition.maxY + wordCurPosition.y > data.containerSize.bottom) {
           wordDom.local.direction.y = -wordDom.local.direction.y
         }
-        if (wordRealPosition.maxY + wordCurPosition.y > data.containerSize.bottom) {
-          wordDirectiion.y = -wordDirectiion.y
-        }
+
         wordCurPosition.x += wordVelocity.x * wordDirectiion.x;
         wordCurPosition.y += wordVelocity.y * wordDirectiion.y;
         wordDom.style.transform = `translate(${wordCurPosition.x}px, ${wordCurPosition.y}px)`
