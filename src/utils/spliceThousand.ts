@@ -1,7 +1,7 @@
 /**
  * 千分位转换
  */
-function spliceThousand(number: string | number) {
+export function spliceThousand(number: string | number) {
   let str = ''
   const arr = number.toString().split('')
   let length = arr.length

@@ -1,0 +1,20 @@
+{
+  "name": "collection-utils",
+  "version": "1.0.0",
+  "description": "一些JS工具方法函数或者好玩的CSS样式等的收集",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JiquanWang99/collection-utils.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JiquanWang99/collection-utils/issues"
+  },
+  "homepage": "https://github.com/JiquanWang99/collection-utils#readme"
+}
